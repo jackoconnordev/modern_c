@@ -1,3 +1,6 @@
 #!/bin/sh
 [ -d bin ] || mkdir bin
-gcc -o bin/first first.c
+
+for file in *.c; do
+  gcc -o "./bin/${file%%.*}" "$file"
+done
