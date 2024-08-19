@@ -46,6 +46,7 @@ void ufset_print(struct UnionFindSet *ufset) {
 }
 
 size_t ufset_find(struct UnionFindSet *ufset, size_t element) {
+  // TODO: Don't allow element1 or element2 bigger than ufset->size
   size_t parent = ufset->elements[element];
   while (parent != element) {
     element = parent;
@@ -55,6 +56,7 @@ size_t ufset_find(struct UnionFindSet *ufset, size_t element) {
 }
 
 void ufset_union(struct UnionFindSet *ufset, size_t element1, size_t element2) {
+  // TODO: Don't allow element1 or element2 bigger than ufset->size
   size_t parent_element1 = ufset->elements[element1];
   size_t parent_element2 = ufset->elements[element2];
 
@@ -72,10 +74,35 @@ void ufset_union(struct UnionFindSet *ufset, size_t element1, size_t element2) {
 }
 
 void ufset_find_replace(struct UnionFindSet *ufset, size_t element,
-                        size_t value) {}
+                        size_t value) {
+  // TODO: Don't allow element1 or element2 bigger than ufset->size
+}
 
-void ufset_weighted_union(struct UnionFindSet *ufset, size_t element_1,
-                          size_t element_2) {
-  // text
-  // text
+void ufset_weighted_union(struct UnionFindSet *ufset, size_t element1,
+                          size_t element2) {
+  // TODO: Don't allow element1 or element2 bigger than ufset->size
+  size_t parent_element1 = ufset->elements[element1];
+  size_t parent_element2 = ufset->elements[element2];
+
+  while (parent_element1 != element1) {
+    element1 = parent_element1;
+    parent_element1 = ufset->elements[element1];
+  }
+
+  while (parent_element2 != element2) {
+    element2 = parent_element2;
+    parent_element2 = ufset->elements[element2];
+  }
+
+  if (ufset->sizes[parent_element1] < ufset->sizes[parent_element2]) {
+    ufset->elements[parent_element1] = parent_element2;
+    ufset->sizes[parent_element2] =
+        ufset->sizes[parent_element1] + ufset->sizes[parent_element2];
+    ufset->sizes[parent_element1] = 0;
+  } else {
+    ufset->elements[parent_element2] = parent_element1;
+    ufset->sizes[parent_element1] =
+        ufset->sizes[parent_element2] + ufset->sizes[parent_element1];
+    ufset->sizes[parent_element2] = 0;
+  }
 }
