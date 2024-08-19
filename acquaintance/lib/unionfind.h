@@ -9,6 +9,10 @@ struct UnionFindSet {
   size_t size;
 };
 
+struct UnionFindSet ufset_init(size_t num_elements);
+
+void ufset_dealloc(struct UnionFindSet ufset);
+
 void ufset_print(struct UnionFindSet ufset);
 
 void ufset_find(struct UnionFindSet ufset, size_t element);
