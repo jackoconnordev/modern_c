@@ -46,6 +46,10 @@ void ufset_dealloc(struct UnionFindSet *ufset) {
 }
 
 void ufset_print(struct UnionFindSet *ufset) {
+  if (ufset->elements == NULL || ufset->sizes == NULL) {
+    fprintf(stderr, "UnionFindSet has been deallocated.\n");
+    return;
+  }
   printf("Elements: ");
   printarray_ptr(ufset->size, ufset->elements);
   printf("   Sizes: ");
@@ -63,7 +67,7 @@ size_t ufset_find(struct UnionFindSet *ufset, size_t element,
   if (element >= ufset->size) {
     fprintf(stdout,
             "Aborting attempt to perform find replace as element (%zu) is "
-            "not an elmement",
+            "not an elmement.\n",
             element);
     return SIZE_MAX;
   }
@@ -77,6 +81,7 @@ size_t ufset_find(struct UnionFindSet *ufset, size_t element,
   if (root_size != NULL) {
     *root_size = ufset->sizes[parent];
   }
+
   return parent;
 }
 
@@ -93,6 +98,7 @@ size_t ufset_get_size(struct UnionFindSet *ufset, size_t element) {
 
 /**
  * Naive union, doesn't attempt to keep the tree depths small at all.
+ * The root of element1 will be set to point to the root of element2.
  * If root_size is not NULL, set the size of the tree element is a part of
  * there.
  */
@@ -101,27 +107,27 @@ size_t ufset_union(struct UnionFindSet *ufset, size_t element1, size_t element2,
   if (element1 >= ufset->size) {
     fprintf(stdout,
             "Aborting attempt to perform union as element1 (%zu) is "
-            "not an elmement",
+            "not an elmement.\n",
             element1);
     return SIZE_MAX;
   }
   if (element2 >= ufset->size) {
     fprintf(stdout,
             "Aborting attempt to perform union as element2 (%zu) is "
-            "not an elmement",
+            "not an elmement.\n",
             element2);
     return SIZE_MAX;
   }
 
+  // Get elements' roots.
   size_t parent_element1 = ufset->elements[element1];
-  size_t parent_element2 = ufset->elements[element2];
-
   while (parent_element1 != element1) {
     element1 = parent_element1;
     parent_element1 = ufset->elements[element1];
   }
   size_t size_element1 = ufset->sizes[parent_element1];
 
+  size_t parent_element2 = ufset->elements[element2];
   while (parent_element2 != element2) {
     element2 = parent_element2;
     parent_element2 = ufset->elements[element2];
@@ -157,14 +163,14 @@ size_t ufset_find_replace(struct UnionFindSet *ufset, size_t element,
   if (element >= ufset->size) {
     fprintf(stdout,
             "Aborting attempt to perform find replace as element (%zu) is "
-            "not an elmement",
+            "not an elmement.\n",
             element);
     return SIZE_MAX;
   }
   if (value >= ufset->size) {
     fprintf(stdout,
             "Aborting attempt to perform find replace as value (%zu) is "
-            "not an elmement",
+            "not an elmement.\n",
             element);
     return SIZE_MAX;
   }
@@ -196,7 +202,7 @@ size_t ufset_find_compress(struct UnionFindSet *ufset, size_t element,
   if (element >= ufset->size) {
     fprintf(stdout,
             "Aborting attempt to perform find compress as (%zu) is "
-            "not an elmement",
+            "not an elmement.\n",
             element);
     return SIZE_MAX;
   }
@@ -222,14 +228,14 @@ size_t ufset_funky_union(struct UnionFindSet *ufset, size_t element1,
   if (element1 >= ufset->size) {
     fprintf(stdout,
             "Aborting attempt to perform union as element1 (%zu) is "
-            "not an elmement",
+            "not an elmement.\n",
             element1);
     return SIZE_MAX;
   }
   if (element2 >= ufset->size) {
     fprintf(stdout,
             "Aborting attempt to perform union as element2 (%zu) is "
-            "not an elmement",
+            "not an elmement.\n",
             element2);
     return SIZE_MAX;
   }
@@ -264,34 +270,25 @@ size_t ufset_weighted_union(struct UnionFindSet *ufset, size_t element1,
   if (element1 >= ufset->size) {
     fprintf(stdout,
             "Aborting attempt to perform weighted union as element1 (%zu) is "
-            "not an elmement",
+            "not an elmement.\n",
             element1);
     return SIZE_MAX;
   }
   if (element2 >= ufset->size) {
     fprintf(stdout,
             "Aborting attempt to perform weighted union as element2 (%zu) is "
-            "not an elmement",
+            "not an elmement.\n",
             element2);
     return SIZE_MAX;
   }
 
   // Get roots of each element's trees.
-  size_t parent_element1 = ufset->elements[element1];
-  size_t parent_element2 = ufset->elements[element2];
-  while (parent_element1 != element1) {
-    element1 = parent_element1;
-    parent_element1 = ufset->elements[element1];
-  }
-  while (parent_element2 != element2) {
-    element2 = parent_element2;
-    parent_element2 = ufset->elements[element2];
-  }
+  size_t root_size1, root_size2;
+  size_t parent_element1 = ufset_find(ufset, element1, &root_size1);
+  size_t parent_element2 = ufset_find(ufset, element2, &root_size2);
 
-  // Union the trees and updae ufset->sizes.
+  // Union the trees and update ufset->sizes.
   size_t new_root;
-  size_t root_size1 = ufset->sizes[parent_element1];
-  size_t root_size2 = ufset->sizes[parent_element2];
   if (root_size1 < root_size2) {
     ufset->elements[parent_element1] = parent_element2;
     new_root = parent_element2;
@@ -300,6 +297,10 @@ size_t ufset_weighted_union(struct UnionFindSet *ufset, size_t element1,
     new_root = parent_element1;
   }
   ufset->sizes[new_root] = root_size1 + root_size2;
+
+  if (root_size != NULL) {
+    *root_size = ufset->sizes[new_root];
+  }
 
   return new_root;
 }
