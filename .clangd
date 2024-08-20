@@ -1,2 +1,2 @@
 CompileFlags:
-  Add: [-xc, -std=c17]
+  Add: [-xc, -std=c17, -I/Users/jackoconnor/Code/personal/modern_c/acquaintance/lib/]
