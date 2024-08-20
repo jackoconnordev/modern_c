@@ -3,3 +3,6 @@ I'll use this repo to store the code I write while going through the textbook Mo
 I like the idea of being able to write programmes which take full advantage of computer hardware and I also
 think this will be good practice for the Computing Systems specialisation in Georgia Tech's Online MsCS (if
 I get accepted).
+
+TODO:
+- [] Learn how to link multiple c files (*.o files?) together instead of creating a lib directory lol.
