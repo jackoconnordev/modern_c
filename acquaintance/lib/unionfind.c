@@ -219,9 +219,9 @@ size_t ufset_find_compress(struct UnionFindSet *ufset, size_t element,
 
 /**
  * Do a union using ufset_find_compress (2 pass), ufset_find_replace (1
- * pass) and ufset_get_size (one pass each tree).
- * If root_size is not NULL, set the size of the tree element is a part of
- * there.
+ * pass) and ufset_get_size (one pass each tree). Merge the smaller tree into
+ * the bigger one. If root_size is not NULL, set the size of the tree element is
+ * a part of there.
  */
 size_t ufset_funky_union(struct UnionFindSet *ufset, size_t element1,
                          size_t element2, size_t *root_size) {

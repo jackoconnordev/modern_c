@@ -1,3 +1,6 @@
+/**
+ * Yes I am testing using print debugging. The order of the tests matters.
+ */
 #include "unionfind.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,9 +37,15 @@ int main(int argc, char *argv[]) {
   ufset_print(ufset_ptr);
 
   puts("");
-  puts("Weighted union element 9 and element 2. Elements[9] should be 3 "
+  puts("Weighted union element 10 and element 2. Elements[9] should be 3 "
        "because Elements[9] tree is smaller.\nSizes[3] should be 4.");
   ufset_weighted_union(ufset_ptr, 1, 9, NULL);
+  ufset_print(ufset_ptr);
+
+  puts("");
+  puts("Funky union find works. Union element 7 and element 9. Elements[6] "
+       "should be 3 and Sizes[3] should be 5.");
+  ufset_funky_union(ufset_ptr, 6, 9, NULL);
   ufset_print(ufset_ptr);
 
   puts("");
