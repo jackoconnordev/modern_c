@@ -30,7 +30,7 @@ struct UnionFindSet ufset_init(size_t size) {
   // initialise correct values for elements and sizes
   for (size_t i = 0; i < size; ++i) {
     elements[i] = i;
-    sizes[i] = 0;
+    sizes[i] = 1;
   }
 
   struct UnionFindSet ufset = {elements, sizes, size};
@@ -46,7 +46,9 @@ void ufset_dealloc(struct UnionFindSet *ufset) {
 }
 
 void ufset_print(struct UnionFindSet *ufset) {
+  printf("Elements: ");
   printarray_ptr(ufset->size, ufset->elements);
+  printf("   Sizes: ");
   printarray_ptr(ufset->size, ufset->sizes);
 }
 
