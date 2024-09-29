@@ -21,5 +21,6 @@ void print_bfs(graph_t *graph);
 size_t count_connected_components(graph_t *graph);
 
 // Exercise 8
+size_t shortest_path(graph_t *graph, size_t source, size_t target);
 
 #endif // !GRAPH
