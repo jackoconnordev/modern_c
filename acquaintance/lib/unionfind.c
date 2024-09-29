@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void printarray_ptr(size_t size, size_t *array) {
   printf("%s", "[ ");
@@ -314,4 +315,23 @@ void ufset_compress(struct UnionFindSet *ufset) {
   for (size_t i = 0; i < ufset->size; ++i) {
     ufset_find_compress(ufset, i, NULL);
   }
+}
+
+/**
+ * Count of the different subsets in the compressed (!) UnionFindSet.
+ */
+size_t ufset_compressed_subsets_count(struct UnionFindSet *ufset) {
+  size_t count = 0;
+  size_t set[ufset->size];
+  memset(set, 0, sizeof(set));
+
+  for (int i = 0; i < ufset->size; ++i) {
+    set[ufset->elements[i]] = 1;
+  }
+
+  for (int j = 0; j < ufset->size; ++j) {
+    count += set[j];
+  }
+
+  return count;
 }

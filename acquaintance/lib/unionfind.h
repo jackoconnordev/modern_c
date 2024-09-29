@@ -38,4 +38,6 @@ size_t ufset_weighted_union(struct UnionFindSet *ufset, size_t element1,
 
 void ufset_compress(struct UnionFindSet *ufset);
 
+size_t ufset_compressed_subsets_count(struct UnionFindSet *ufset);
+
 #endif // !UNIONFIND_H

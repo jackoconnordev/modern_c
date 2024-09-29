@@ -8,13 +8,17 @@ typedef struct graph graph_t;
 
 graph_t *graph_init(size_t num_vertices);
 
+void deallocate_graph(graph_t *graph);
+
+size_t num_vertices(graph_t *graph);
+
 bool edge_between(graph_t *graph, size_t source, size_t target);
 
 void add_edge(graph_t *graph, size_t source, size_t target);
 
 void print_bfs(graph_t *graph);
 
-void print_connected_components(graph_t *graph);
+size_t count_connected_components(graph_t *graph);
 
 // Exercise 8
 
