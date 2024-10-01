@@ -5,4 +5,5 @@ think this will be good practice for the Computing Systems specialisation in Geo
 I get accepted).
 
 TODO:
-- [] Learn how to link multiple c files (*.o files?) together instead of creating a lib directory lol.
+- [x] Learn how to link multiple c files (*.o files?) together instead of creating a lib directory lol.
+  - Just pass multiple source files as arguments to the compiler \*facepalm\*
