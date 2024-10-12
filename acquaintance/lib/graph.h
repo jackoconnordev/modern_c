@@ -16,7 +16,7 @@ bool edge_between(graph_t *graph, size_t source, size_t target);
 
 void add_edge(graph_t *graph, size_t source, size_t target);
 
-void print_bfs(graph_t *graph);
+void print_bfs(graph_t *graph, size_t source);
 
 size_t count_connected_components(graph_t *graph);
 

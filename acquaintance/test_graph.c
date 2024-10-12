@@ -56,9 +56,26 @@ void test_count_connected_components() {
   puts("passed");
 }
 
+void test_bfs() {
+  puts("test_bfs:");
+  graph_t *graph = graph_init(5);
+
+  add_edge(graph, 0, 1);
+  add_edge(graph, 1, 2);
+  add_edge(graph, 0, 4);
+  add_edge(graph, 4, 3);
+
+  print_bfs(graph, 1);
+
+  deallocate_graph(graph);
+  free(graph);
+  graph = NULL;
+}
+
 int main(int argc, char *argv[]) {
   test_add_edge();
   test_count_connected_components();
+  test_bfs();
 
   return EXIT_SUCCESS;
 }
