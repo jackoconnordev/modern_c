@@ -22,11 +22,17 @@ graph_t *graph_init(size_t num_vertices) {
     malloc_failed = true;
   }
 
-  size_t adj_matrix_size = num_vertices * num_vertices * sizeof(size_t);
+  size_t adj_matrix_size = num_vertices * num_vertices * sizeof(bool);
   bool *adj_matrix = malloc(adj_matrix_size);
-  if (graph->adj_matrix == NULL) {
+  if (adj_matrix == NULL) {
     malloc_failed = true;
   }
+
+  if (malloc_failed) {
+    puts("Failed to allocate enough memory to create graph.");
+    exit(EXIT_FAILURE);
+  }
+
   memset(adj_matrix, false, adj_matrix_size);
 
   graph->num_vertices = num_vertices;
@@ -91,7 +97,7 @@ void print_bfs(graph_t *graph, size_t source) {
 }
 
 size_t count_connected_components(graph_t *graph) {
-  struct UnionFindSet ufset = ufset_init(num_vertices(graph));
+  struct UnionFindSet ufset = ufset_init(graph->num_vertices);
 
   for (int i = 0; i < graph->num_vertices; ++i) {
     for (int j = 0; j <= i; ++j) {
@@ -108,4 +114,40 @@ size_t count_connected_components(graph_t *graph) {
   ufset_dealloc(&ufset);
 
   return count;
+}
+
+/**
+ * To print, create a new adjacency matrix and mark only edges
+ * in the tree as `true`. Then print all the edges.
+ */
+void print_spanning_tree(graph_t *graph) {
+  struct UnionFindSet ufset = ufset_init(graph->num_vertices);
+  graph_t *spanning_tree = graph_init(graph->num_vertices);
+
+  // Create spanning tree
+  for (int i = 0; i < graph->num_vertices; ++i) {
+    for (int j = 0; j < graph->num_vertices; ++j) {
+      if (!edge_between(graph, i, j)) {
+        continue;
+      }
+      if (ufset_find(&ufset, i, NULL) != ufset_find(&ufset, j, NULL)) {
+        add_edge(spanning_tree, i, j);
+        ufset_union(&ufset, i, j, NULL);
+      }
+    }
+  }
+
+  // Print spanning tree edges
+  for (int i = 0; i < spanning_tree->num_vertices; ++i) {
+    for (int j = 0; j <= i; ++j) {
+      if (edge_between(spanning_tree, i, j)) {
+        printf("%d <-> %d\n", i, j);
+      }
+    }
+  }
+
+  ufset_dealloc(&ufset);
+  deallocate_graph(graph);
+  free(graph);
+  graph = NULL;
 }

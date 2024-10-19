@@ -17,7 +17,7 @@ void test_add_edge() {
   deallocate_graph(graph);
   free(graph);
   graph = NULL;
-  puts("passed");
+  puts("passed\n");
 }
 
 /* Graph I'm testing w/ 7 connected components
@@ -53,7 +53,7 @@ void test_count_connected_components() {
 
   free(graph);
   graph = NULL;
-  puts("passed");
+  puts("passed\n");
 }
 
 void test_bfs() {
@@ -72,10 +72,28 @@ void test_bfs() {
   graph = NULL;
 }
 
+/*
+ * There should be 9 edges. Eyeball the rest if it looks okay.
+ */
+void test_spanning_tree() {
+  puts("\ntest_spanning_tree");
+  puts("Expecting 9 edges to be printed");
+  graph_t *graph = graph_init(10);
+
+  for (int i = 0; i < 10; ++i) {
+    for (int j = 0; j < 10; ++j) {
+      add_edge(graph, i, j);
+    }
+  }
+
+  print_spanning_tree(graph);
+}
+
 int main(int argc, char *argv[]) {
   test_add_edge();
   test_count_connected_components();
   test_bfs();
+  test_spanning_tree();
 
   return EXIT_SUCCESS;
 }
